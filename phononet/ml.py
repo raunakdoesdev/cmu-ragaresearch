@@ -10,12 +10,12 @@ from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TensorBoardLogger
 from torch.utils.data import DataLoader
 
-
-class RagaDetector(pl.LightningModule):
-    def __init__(self, train, val, dropout=0.15):
-        super(RagaDetector, self).__init__()
-        self.train = train
-        self.val = val
+class PhonoNet(pl.LightningModule):
+    def __init__(self, train_set, val_set, hparams, dropout=0.15):
+        super(PhonoNet, self).__init__()
+        self.hparams = hparams
+        self.train_set = train_set
+        self.val_set = val_set
         self.encoder = nn.Sequential(OrderedDict([
             ('conv1', nn.Conv2d(1, 64, 3, padding=1)),
             ('norm1', nn.BatchNorm2d(64)),
@@ -44,7 +44,8 @@ class RagaDetector(pl.LightningModule):
         self.fc1 = nn.Linear(200, 40)
 
     def forward(self, x):
-        x = x.squeeze().unfold(1, 250, 250).permute(1, 0, 2).unsqueeze(1)  # convert song to chunks -> batches
+        x = x.unsqueeze(1)  # add empty channel dimension
+        print(x.shape)
         x = self.encoder(x)
         x = x.view(x.shape[0], -1)
         x = self.fc1(x)
@@ -53,7 +54,6 @@ class RagaDetector(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self(x)
-        y = y.repeat(y_hat.shape[0])
         return {'loss': F.cross_entropy(y_hat, y)}
 
     def validation_epoch_end(self, outputs):
@@ -63,33 +63,38 @@ class RagaDetector(pl.LightningModule):
         return log
 
     def val_dataloader(self):
-        return DataLoader(self.val, batch_size=1)
+        return DataLoader(self.val_set, batch_size=self.hparams.batch_size)
 
     def training_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self(x)
-        y = y.repeat(y_hat.shape[0])
         return {'loss': F.cross_entropy(y_hat, y)}
 
     def train_dataloader(self):
-        return DataLoader(self.train, batch_size=1)
+        return DataLoader(self.train_set, batch_size=self.hparams.batch_size)
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
 
 
-class RagaDetector()
+class RagaDetector:
+    def __init__(self, batch_size=100):
+        self.batch_size = batch_size
+
     def fit(self, train, val):
         parser = ArgumentParser()
         parser.add_argument('--learning_rate', type=float, default=0.01)
+        parser.add_argument('--batch_size', type=int, default=self.batch_size)
         args = parser.parse_args()
 
-        raga_detector = RagaDetector(train, val)
-        trainer = Trainer(gpus=4, logger=TensorBoardLogger('tb_logs'))
+        self.phono_net = PhonoNet(train, val, args)
+        trainer = Trainer(logger=TensorBoardLogger('tb_logs'))
 
         # Find learning rate
-        lr_finder = trainer.lr_find(raga_detector)
+        lr_finder = trainer.lr_find(self.phono_net)
         new_lr = lr_finder.suggestion()
-        raga_detector.hparams.lr = new_lr
+        self.phono_net.hparams.lr = new_lr
 
-        trainer.fit(raga_detector)
+        print(f"Optimal Learning Rate: {new_lr}")
+
+        trainer.fit(self.phono_net)

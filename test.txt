@@ -1,7 +1,0 @@
-Best trial:
-  Value: 0.841035660185598
-  Params:
-    num_filters: 14
-    filter_width: 711
-    filter_width2: 201
-    num_filters2: 4
