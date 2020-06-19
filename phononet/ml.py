@@ -45,7 +45,6 @@ class PhonoNet(pl.LightningModule):
 
     def forward(self, x):
         x = x.unsqueeze(1)  # add empty channel dimension
-        print(x.shape)
         x = self.encoder(x)
         x = x.view(x.shape[0], -1)
         x = self.fc1(x)
@@ -74,7 +73,7 @@ class PhonoNet(pl.LightningModule):
         return DataLoader(self.train_set, batch_size=self.hparams.batch_size)
 
     def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
+        return torch.optim.Adadelta(self.parameters()) #, lr=self.hparams.learning_rate)
 
 
 class RagaDetector:
@@ -88,13 +87,13 @@ class RagaDetector:
         args = parser.parse_args()
 
         self.phono_net = PhonoNet(train, val, args)
-        trainer = Trainer(logger=TensorBoardLogger('tb_logs'))
+        trainer = Trainer(gpus=1, logger=TensorBoardLogger('tb_logs'))
 
         # Find learning rate
-        lr_finder = trainer.lr_find(self.phono_net)
-        new_lr = lr_finder.suggestion()
-        self.phono_net.hparams.lr = new_lr
+        # lr_finder = trainer.lr_find(self.phono_net)
+        # new_lr = lr_finder.suggestion()
+        # self.phono_net.hparams.lr = new_lr
 
-        print(f"Optimal Learning Rate: {new_lr}")
+        # print(f"Optimal Learning Rate: {new_lr}")
 
         trainer.fit(self.phono_net)

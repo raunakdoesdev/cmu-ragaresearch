@@ -66,6 +66,7 @@ class ChromaChunkDataset(Dataset):
         self.y = []
         for chroma, raga_id in full_chroma_dataset:
             unfolded = chroma.unfold(1, chunk_size, chunk_size).permute(1, 0, 2)
+            
             self.X.append(unfolded)
             self.y += len(unfolded) * [raga_id]
 
