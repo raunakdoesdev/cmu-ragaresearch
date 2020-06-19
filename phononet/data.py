@@ -65,9 +65,12 @@ class ChromaChunkDataset(Dataset):
         self.X = []
         self.y = []
         for chroma, raga_id in full_chroma_dataset:
-            unfolded = chroma.unfold(1, chunk_size, chunk_size).permute(1, 0, 2)
-            
-            self.X.append(unfolded)
+            unfolded = chroma.split(chunk_size, dim=1)
+            for i in range(len(unfolded)):
+                if unfolded[i].shape[1] != chunk_size:
+                    padding = torch.zeros(unfolded[i].shape[0], chunk_size - unfolded[i].shape[1])
+                    chunk = torch.cat((chunk, padding), 3)
+                self.X.append(unfolded[i])
             self.y += len(unfolded) * [raga_id]
 
         self.X = torch.cat(self.X, dim=0)
