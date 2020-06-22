@@ -9,7 +9,7 @@ import torch.nn.functional as F
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TensorBoardLogger
 from torch.utils.data import DataLoader
-
+import multiprocessing as mp
 from sklearn import metrics
 
 
@@ -72,7 +72,8 @@ class PhonoNet(pl.LightningModule):
         return log
 
     def val_dataloader(self):
-        return DataLoader(self.val_set, batch_size=self.hparams.batch_size)
+        return DataLoader(self.val_set, batch_size=self.hparams.batch_size, shuffle=True, num_workers=mp.cpu_count(),
+                          pin_memory=True)
 
     def training_step(self, batch, batch_idx):
         x, y = batch
@@ -80,10 +81,12 @@ class PhonoNet(pl.LightningModule):
         return {'loss': F.cross_entropy(y_hat, y)}
 
     def train_dataloader(self):
-        return DataLoader(self.train_set, batch_size=self.hparams.batch_size)
+        return DataLoader(self.train_set, batch_size=self.hparams.batch_size, shuffle=True, num_workers=mp.cpu_count(),
+                          pin_memory=True)
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
+
 
 class RagaDetector:
     def __init__(self, batch_size=100, gpus=None):
