@@ -10,6 +10,9 @@ from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TensorBoardLogger
 from torch.utils.data import DataLoader
 
+from sklearn import metrics
+
+
 class PhonoNet(pl.LightningModule):
     def __init__(self, train_set, val_set, hparams, dropout=0.15):
         super(PhonoNet, self).__init__()
@@ -56,8 +59,10 @@ class PhonoNet(pl.LightningModule):
         return {'loss': F.cross_entropy(y_hat, y)}
 
     def validation_epoch_end(self, outputs):
-        avg_loss = torch.stack([x['loss'] for x in outputs]).mean()
-        log = {'val_loss': avg_loss}
+        metrics = outputs[0].keys()
+        log = {}
+        for metric in metrics:
+            log[f'val_{metric}'] = torch.stack([x[metric] for x in outputs]).mean()
         log['log'] = copy.deepcopy(log)
         return log
 
@@ -73,27 +78,26 @@ class PhonoNet(pl.LightningModule):
         return DataLoader(self.train_set, batch_size=self.hparams.batch_size)
 
     def configure_optimizers(self):
-        return torch.optim.Adadelta(self.parameters()) #, lr=self.hparams.learning_rate)
+        return torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
 
+    class RagaDetector:
+        def __init__(self, batch_size=100):
+            self.batch_size = batch_size
 
-class RagaDetector:
-    def __init__(self, batch_size=100):
-        self.batch_size = batch_size
+        def fit(self, train, val):
+            parser = ArgumentParser()
+            parser.add_argument('--learning_rate', type=float, default=0.01)
+            parser.add_argument('--batch_size', type=int, default=self.batch_size)
+            args = parser.parse_args()
 
-    def fit(self, train, val):
-        parser = ArgumentParser()
-        parser.add_argument('--learning_rate', type=float, default=0.01)
-        parser.add_argument('--batch_size', type=int, default=self.batch_size)
-        args = parser.parse_args()
+            self.phono_net = PhonoNet(train, val, args)
+            trainer = Trainer(gpus=1, logger=TensorBoardLogger('tb_logs'))
 
-        self.phono_net = PhonoNet(train, val, args)
-        trainer = Trainer(gpus=1, logger=TensorBoardLogger('tb_logs'))
+            # Find learning rate
+            # lr_finder = trainer.lr_find(self.phono_net)
+            # new_lr = lr_finder.suggestion()
+            # self.phono_net.hparams.lr = new_lr
 
-        # Find learning rate
-        # lr_finder = trainer.lr_find(self.phono_net)
-        # new_lr = lr_finder.suggestion()
-        # self.phono_net.hparams.lr = new_lr
+            # print(f"Optimal Learning Rate: {new_lr}")
 
-        # print(f"Optimal Learning Rate: {new_lr}")
-
-        trainer.fit(self.phono_net)
+            trainer.fit(self.phono_net)
