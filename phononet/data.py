@@ -75,8 +75,6 @@ class ChromaChunkDataset(Dataset):
             self.y += len(unfolded) * [raga_id]
 
         self.X = torch.cat(self.X, dim=0)
-        print(self.X.shape)
-        print(len(self.y))
 
     def __getitem__(self, item):
         return self.X[item], self.y[item]

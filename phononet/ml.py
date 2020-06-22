@@ -64,10 +64,6 @@ class PhonoNet(pl.LightningModule):
         y_true = y_true.cpu()
         y_score = y_score.cpu()
         y_pred = y_pred.cpu()
-
-        print(y_true.shape)
-        print(y_score.shape)
-
         ret['Accuracy'] = torch.Tensor([metrics.accuracy_score(y_true, y_pred)])
         # ret['F1 Score'] = metrics.precision_score(y_true, y_pred, )
         # ret['PR AUC'] =  metrics.average_precision_score(y_true, y_score)
