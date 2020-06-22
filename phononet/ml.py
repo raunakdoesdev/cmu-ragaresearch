@@ -94,10 +94,10 @@ class PhonoNet(pl.LightningModule):
             trainer = Trainer(gpus=1, logger=TensorBoardLogger('tb_logs'))
 
             # Find learning rate
-            # lr_finder = trainer.lr_find(self.phono_net)
-            # new_lr = lr_finder.suggestion()
-            # self.phono_net.hparams.lr = new_lr
+            lr_finder = trainer.lr_find(self.phono_net)
+            new_lr = lr_finder.suggestion()
+            self.phono_net.hparams.lr = new_lr
 
-            # print(f"Optimal Learning Rate: {new_lr}")
+            print(f"Optimal Learning Rate: {new_lr}")
 
             trainer.fit(self.phono_net)
