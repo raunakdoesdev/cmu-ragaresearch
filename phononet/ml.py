@@ -85,24 +85,25 @@ class PhonoNet(pl.LightningModule):
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
 
-    class RagaDetector:
-        def __init__(self, batch_size=100):
-            self.batch_size = batch_size
+class RagaDetector:
+    def __init__(self, batch_size=100, gpus=None):
+        self.batch_size = batch_size
+        self.gpus = gpus
 
-        def fit(self, train, val):
-            parser = ArgumentParser()
-            parser.add_argument('--learning_rate', type=float, default=0.01)
-            parser.add_argument('--batch_size', type=int, default=self.batch_size)
-            args = parser.parse_args()
+    def fit(self, train, val):
+        parser = ArgumentParser()
+        parser.add_argument('--learning_rate', type=float, default=0.01)
+        parser.add_argument('--batch_size', type=int, default=self.batch_size)
+        args = parser.parse_args()
 
-            self.phono_net = PhonoNet(train, val, args)
-            trainer = Trainer(gpus=1, logger=TensorBoardLogger('tb_logs'))
+        self.phono_net = PhonoNet(train, val, args)
+        trainer = Trainer(gpus=self.gpus, logger=TensorBoardLogger('tb_logs'))
 
-            # Find learning rate
-            lr_finder = trainer.lr_find(self.phono_net)
-            new_lr = lr_finder.suggestion()
-            self.phono_net.hparams.lr = new_lr
+        # Find learning rate
+        lr_finder = trainer.lr_find(self.phono_net)
+        new_lr = lr_finder.suggestion()
+        self.phono_net.hparams.lr = new_lr
 
-            print(f"Optimal Learning Rate: {new_lr}")
+        print(f"Optimal Learning Rate: {new_lr}")
 
-            trainer.fit(self.phono_net)
+        trainer.fit(self.phono_net)

@@ -15,5 +15,5 @@ train = pn.ChromaChunkDataset(train, chunk_size=1500)  # divide training set int
 print(train.X.shape)
 test = pn.ChromaChunkDataset(test, chunk_size=1500)
 
-raga_detector = pn.RagaDetector(batch_size=100)
+raga_detector = pn.RagaDetector(batch_size=32, gpus=2)
 raga_detector.fit(train, test)
