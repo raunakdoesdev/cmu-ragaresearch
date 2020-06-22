@@ -44,7 +44,7 @@ class PhonoNet(pl.LightningModule):
             ('drop4', nn.Dropout(p=dropout))
         ]))
 
-        self.fc1 = nn.Linear(200, 40)
+        self.fc1 = nn.Linear(200, 30)
 
     def forward(self, x):
         x = x.unsqueeze(1)  # add empty channel dimension
@@ -55,13 +55,24 @@ class PhonoNet(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         x, y_true = batch
-        y_score = self(x)
+        y_out = self(x)
+        ret = {'Cross Entropy Loss': F.cross_entropy(y_out, y_true)}
+
+        y_score = F.softmax(y_out, dim=1) 
         _, y_pred = torch.max(y_score, 1)
-        return {'Cross Entropy Loss': F.cross_entropy(y_score, y_true),
-                'ROC AUC': metrics.roc_auc_score(y_true, y_score),
-                'Accuracy': metrics.accuracy_score(y_true, y_pred),
-                'F1 Score': metrics.precision_score(y_true, y_pred),
-                'PR AUC': metrics.average_precision_score(y_true, y_score)}
+
+        y_true = y_true.cpu()
+        y_score = y_score.cpu()
+        y_pred = y_pred.cpu()
+
+        print(y_true.shape)
+        print(y_score.shape)
+
+        ret['Accuracy'] = torch.Tensor([metrics.accuracy_score(y_true, y_pred)])
+        # ret['F1 Score'] = metrics.precision_score(y_true, y_pred, )
+        # ret['PR AUC'] =  metrics.average_precision_score(y_true, y_score)
+
+        return ret
 
     def validation_epoch_end(self, outputs):
         metrics = outputs[0].keys()
