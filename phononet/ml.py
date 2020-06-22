@@ -54,9 +54,14 @@ class PhonoNet(pl.LightningModule):
         return x
 
     def validation_step(self, batch, batch_idx):
-        x, y = batch
-        y_hat = self(x)
-        return {'loss': F.cross_entropy(y_hat, y)}
+        x, y_true = batch
+        y_score = self(x)
+        _, y_pred = torch.max(y_score, 1)
+        return {'Cross Entropy Loss': F.cross_entropy(y_score, y_true),
+                'ROC AUC': metrics.roc_auc_score(y_true, y_score),
+                'Accuracy': metrics.accuracy_score(y_true, y_pred),
+                'F1 Score': metrics.precision_score(y_true, y_pred),
+                'PR AUC': metrics.average_precision_score(y_true, y_score)}
 
     def validation_epoch_end(self, outputs):
         metrics = outputs[0].keys()
