@@ -2,12 +2,20 @@ import copy
 import glob
 import json
 import os
-
+import random
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 import torch
 import pickle
 from torch.utils.data import Dataset
+
+
+def transpose_chromagram(x):
+    shift = random.randint(0, 11)
+    if shift == 0:
+        return x
+    else:
+        return torch.cat([x[-shift:, :], x[:-shift, :]], 0)
 
 
 class FullChromaDataset(Dataset):
@@ -61,9 +69,10 @@ class FullChromaDataset(Dataset):
 
 
 class ChromaChunkDataset(Dataset):
-    def __init__(self, full_chroma_dataset: FullChromaDataset, chunk_size):
+    def __init__(self, full_chroma_dataset: FullChromaDataset, chunk_size, augmentation=None):
         self.X = []
         self.y = []
+        self.augmentation = augmentation
         for chroma, raga_id in full_chroma_dataset:
             unfolded = chroma.split(chunk_size, dim=1)
             for i in range(len(unfolded)):
@@ -77,7 +86,10 @@ class ChromaChunkDataset(Dataset):
         self.X = torch.cat(self.X, dim=0)
 
     def __getitem__(self, item):
-        return self.X[item], self.y[item]
+        if self.augmentation is None:
+            return self.X[item], self.y[item]
+        else:
+            return self.augmentation(self.X[item]), self.y[item]
 
     def __len__(self):
         return len(self.y)
