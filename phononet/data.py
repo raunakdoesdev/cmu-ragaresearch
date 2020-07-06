@@ -10,8 +10,9 @@ import pickle
 from torch.utils.data import Dataset
 
 
-def transpose_chromagram(x):
-    shift = random.randint(0, 11)
+def transpose_chromagram(x, shift=None):
+    if shift is None:
+        shift = random.randint(0, 11)
     if shift == 0:
         return x
     else:
@@ -42,6 +43,12 @@ class FullChromaDataset(Dataset):
                 file_name = os.path.basename(self.file).split('.pkl')[0]
                 if file_name not in include_mbids:
                     self.files.remove(self.file)
+        else:
+            for self.file in copy.deepcopy(self.files):
+                mbid = os.path.basename(self.file).split('.')[0]
+                if len(self.metadata[mbid]['raags']) < 1:
+                    self.files.remove(self.file)
+
 
         self.X = []
         self.y = []
@@ -62,14 +69,20 @@ class FullChromaDataset(Dataset):
     def __len__(self):
         return len(self.y)
 
-    def train_test_split(self, test_size=None, train_size=None):
+    def train_test_split(self, test_size=None, train_size=None, random_state=1):
         X_train, X_test, y_train, y_test = train_test_split(self.X, self.y, test_size=test_size, train_size=train_size,
-                                                            stratify=self.y)
+                                                            stratify=self.y, random_state=random_state)
         return FullChromaDataset.init_x_y(X_train, y_train), FullChromaDataset.init_x_y(X_test, y_test)
 
 
 class ChromaChunkDataset(Dataset):
     def __init__(self, full_chroma_dataset: FullChromaDataset, chunk_size, augmentation=None):
+        """
+
+        :param full_chroma_dataset:
+        :param chunk_size:
+        :param augmentation:
+        """
         self.X = []
         self.y = []
         self.augmentation = augmentation
@@ -93,3 +106,69 @@ class ChromaChunkDataset(Dataset):
 
     def __len__(self):
         return len(self.y)
+
+
+import torch
+import torch.utils.data
+import torchvision
+
+
+def dataset_get_label_callback(dataset, idx):
+    return dataset[idx][1]
+
+
+class ImbalancedDatasetSampler(torch.utils.data.sampler.Sampler):
+    """Samples elements randomly from a given list of indices for imbalanced dataset
+    Arguments:
+        indices (list, optional): a list of indices
+        num_samples (int, optional): number of samples to draw
+        callback_get_label func: a callback-like function which takes two arguments - dataset and index
+    """
+
+    def __init__(self, dataset, indices=None, num_samples=None, callback_get_label=dataset_get_label_callback):
+
+        # if indices is not provided,
+        # all elements in the dataset will be considered
+        self.indices = list(range(len(dataset))) \
+            if indices is None else indices
+
+        # define custom callback
+        self.callback_get_label = callback_get_label
+
+        # if num_samples is not provided,
+        # draw `len(indices)` samples in each iteration
+        self.num_samples = len(self.indices) \
+            if num_samples is None else num_samples
+
+        # distribution of classes in the dataset
+        label_to_count = {}
+        for idx in self.indices:
+            label = self._get_label(dataset, idx)
+            if label in label_to_count:
+                label_to_count[label] += 1
+            else:
+                label_to_count[label] = 1
+
+        # weight for each sample
+        weights = [1.0 / label_to_count[self._get_label(dataset, idx)]
+                   for idx in self.indices]
+        self.weights = torch.DoubleTensor(weights)
+
+    def _get_label(self, dataset, idx):
+        if isinstance(dataset, torchvision.datasets.MNIST):
+            return dataset.train_labels[idx].item()
+        elif isinstance(dataset, torchvision.datasets.ImageFolder):
+            return dataset.imgs[idx][1]
+        elif isinstance(dataset, torch.utils.data.Subset):
+            return dataset.dataset.imgs[idx][1]
+        elif self.callback_get_label:
+            return self.callback_get_label(dataset, idx)
+        else:
+            raise NotImplementedError
+
+    def __iter__(self):
+        return (self.indices[i] for i in torch.multinomial(
+            self.weights, self.num_samples, replacement=True))
+
+    def __len__(self):
+        return self.num_samples
