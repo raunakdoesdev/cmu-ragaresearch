@@ -2,25 +2,53 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8c0427d0-dd95-4567-9f99-f9dc3d2e8462" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notebooks/01-sc-initial-data-exploration.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/data/download_dataset.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/training/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/training/evaluation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PhonoNet.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PhonoNet.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/download-dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp_scripts/download-dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generate_chroma.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_scripts/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hindustani.json" beforeDir="false" afterPath="$PROJECT_DIR$/temp_scripts/hindustani.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hindustaniv2.json" beforeDir="false" afterPath="$PROJECT_DIR$/main_scripts/hindustaniv2.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old_errors.txt" beforeDir="false" afterPath="$PROJECT_DIR$/temp_scripts/old_errors.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/path_mbid_ragaid.json" beforeDir="false" afterPath="$PROJECT_DIR$/temp_scripts/path_mbid_ragaid.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phononet/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/phononet/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phononet/ml.py" beforeDir="false" afterPath="$PROJECT_DIR$/phononet/ml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/process_json.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp_scripts/process_json.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_scripts/SankalpRagaDataset.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_scripts/hindustaniv2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_scripts/lr_find_temp.ckpt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_scripts/t-sne.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_scripts/train-carnatic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_scripts/train.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phononet/Untitled.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phononet/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phononet/data.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phononet/ml.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phononet/plotter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phononet/util.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_scripts/download-dataset.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_scripts/hindustani.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_scripts/old_errors.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_scripts/path_mbid_ragaid.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_scripts/process_json.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -44,27 +72,32 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.notebooks.jupyter.connections.configuration.JupyterServerConfigurable" />
+    <property name="ignore_missing_gitignore" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/notebooks" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\sauha\PycharmProjects\PhonoNet\experiments\chunk_size" />
+      <recent name="C:\Users\sauha\PycharmProjects\PhonoNet" />
+      <recent name="C:\Users\sauha\PycharmProjects\PhonoNet\src\data" />
+      <recent name="C:\Users\sauha\PycharmProjects\PhonoNet\main_scripts" />
+      <recent name="C:\Users\sauha\PycharmProjects\PhonoNet\temp_scripts" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\sauha\PycharmProjects\PhonoNet\notebooks" />
+      <recent name="C:\Users\sauha\PycharmProjects\PhonoNet\main_scripts" />
       <recent name="C:\Users\sauha\PycharmProjects\PhonoNet" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\sauha\PycharmProjects\PhonoNet\temp_scripts" />
-      <recent name="C:\Users\sauha\PycharmProjects\PhonoNet\main_scripts" />
-      <recent name="C:\Users\sauha\PycharmProjects\PhonoNet\hindustani" />
-    </key>
   </component>
-  <component name="RunManager" selected="Python.train (1)">
-    <configuration name="data" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.train (2)">
+    <configuration name="process_json" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PhonoNet" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -72,12 +105,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/phononet" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/temp_scripts" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/phononet/data.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/temp_scripts/process_json.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -86,51 +119,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="download-dataset" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="PhonoNet" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\sauha\PycharmProjects\PhonoNet\temp_scripts\download-dataset.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="ml" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="PhonoNet" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/phononet" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/phononet/ml.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="train (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="train (1)" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true" nameIsGenerated="true">
       <module name="PhonoNet" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -152,7 +141,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="train" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="train (2)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PhonoNet" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -160,12 +149,12 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments/chunk_size" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\sauha\PycharmProjects\PhonoNet\main_scripts\train.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/chunk_size/train.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -174,18 +163,69 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="train-carnatic" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PhonoNet" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/main_scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main_scripts/train-carnatic.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="train" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PhonoNet" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/experiments" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/experiments/train.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.train (1)" />
+      <item itemvalue="Python.process_json" />
+      <item itemvalue="Python.train-carnatic" />
+      <item itemvalue="Python.train" />
+      <item itemvalue="Python.train (2)" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.train (1)" />
+        <item itemvalue="Python.train (2)" />
         <item itemvalue="Python.train" />
-        <item itemvalue="Python.ml" />
-        <item itemvalue="Python.data" />
-        <item itemvalue="Python.download-dataset" />
+        <item itemvalue="Python.train-carnatic" />
+        <item itemvalue="Python.process_json" />
+        <item itemvalue="Python.train (1)" />
       </list>
     </recent_temporary>
   </component>
   <component name="SvnConfiguration">
-    <configuration />
+    <configuration>C:\Users\sauha\AppData\Roaming\Subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -199,6 +239,25 @@
       <workItem from="1588656283101" duration="12690000" />
       <workItem from="1592252739903" duration="3337000" />
       <workItem from="1592332733275" duration="28534000" />
+      <workItem from="1592864195389" duration="4000" />
+      <workItem from="1593023980832" duration="9112000" />
+      <workItem from="1593044819691" duration="53000" />
+      <workItem from="1593105948165" duration="5248000" />
+      <workItem from="1593191673677" duration="17410000" />
+      <workItem from="1593217183944" duration="12000" />
+      <workItem from="1593460830584" duration="2568000" />
+      <workItem from="1593576771902" duration="6693000" />
+      <workItem from="1593794924590" duration="2246000" />
+      <workItem from="1593872152568" duration="6763000" />
+      <workItem from="1593921345610" duration="23000" />
+      <workItem from="1593968739737" duration="6267000" />
+      <workItem from="1594002698100" duration="6048000" />
+      <workItem from="1594152545000" duration="5000" />
+      <workItem from="1594338059766" duration="2012000" />
+      <workItem from="1594417781471" duration="1224000" />
+      <workItem from="1598055215604" duration="4230000" />
+      <workItem from="1598116994703" duration="1694000" />
+      <workItem from="1598226957892" duration="16325000" />
     </task>
     <servers />
   </component>
@@ -206,20 +265,24 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="439" y="152" key="#Deployment" timestamp="1592499799544">
+    <state x="439" y="152" key="#Deployment" timestamp="1598228136862">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="343" y="140" key="#Deployment/0.0.1500.960@0.0.1500.960" timestamp="1592330791194" />
-    <state x="439" y="152" key="#Deployment/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592499799544" />
+    <state x="439" y="152" key="#Deployment/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598228136862" />
     <state x="552" y="179" key="#Notifications" timestamp="1592332846494">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="179" key="#Notifications/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592332846494" />
-    <state x="264" y="147" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1592332889776">
+    <state x="552" y="179" key="#Options" timestamp="1593582299161">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="179" key="#Options/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1593582299161" />
+    <state x="264" y="147" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1593110303858">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="206" y="136" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1500.960@0.0.1500.960" timestamp="1592330616559" />
-    <state x="264" y="147" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592332889776" />
+    <state x="264" y="147" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1593110303858" />
     <state x="627" y="324" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1592337566794">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -228,38 +291,38 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1736" height="856" key="DirDiffDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592508848935" />
-    <state x="627" y="248" key="FileChooserDialogImpl" timestamp="1592499788973">
+    <state x="627" y="248" key="FileChooserDialogImpl" timestamp="1592858305345">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="627" y="248" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592499788973" />
-    <state width="1877" height="283" key="GridCell.Tab.0.bottom" timestamp="1592508922995">
+    <state x="627" y="248" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592858305345" />
+    <state width="1921" height="303" key="GridCell.Tab.0.bottom" timestamp="1598246562455">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1458" height="469" key="GridCell.Tab.0.bottom/0.0.1500.960@0.0.1500.960" timestamp="1592331761858" />
-    <state width="1877" height="283" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592508922995" />
-    <state width="1877" height="515" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1588744251386" />
-    <state width="1877" height="299" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1588656893277" />
-    <state width="1877" height="283" key="GridCell.Tab.0.center" timestamp="1592508922995">
+    <state width="1921" height="303" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598246562455" />
+    <state width="914" height="406" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593806764725" />
+    <state width="1877" height="204" key="GridCell.Tab.0.bottom/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1593626621816" />
+    <state width="1921" height="303" key="GridCell.Tab.0.center" timestamp="1598246562455">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1458" height="469" key="GridCell.Tab.0.center/0.0.1500.960@0.0.1500.960" timestamp="1592331761857" />
-    <state width="1877" height="283" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592508922995" />
-    <state width="1877" height="515" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1588744251386" />
-    <state width="1877" height="299" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1588656893277" />
-    <state width="1877" height="283" key="GridCell.Tab.0.left" timestamp="1592508922995">
+    <state width="1921" height="303" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598246562455" />
+    <state width="914" height="406" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593806764724" />
+    <state width="1877" height="204" key="GridCell.Tab.0.center/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1593626621816" />
+    <state width="1921" height="303" key="GridCell.Tab.0.left" timestamp="1598246562455">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1458" height="469" key="GridCell.Tab.0.left/0.0.1500.960@0.0.1500.960" timestamp="1592331761856" />
-    <state width="1877" height="283" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592508922995" />
-    <state width="1877" height="515" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1588744251386" />
-    <state width="1877" height="299" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1588656893277" />
-    <state width="1877" height="283" key="GridCell.Tab.0.right" timestamp="1592508922995">
+    <state width="1921" height="303" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598246562455" />
+    <state width="914" height="406" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593806764724" />
+    <state width="1877" height="204" key="GridCell.Tab.0.left/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1593626621816" />
+    <state width="1921" height="303" key="GridCell.Tab.0.right" timestamp="1598246562455">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1458" height="469" key="GridCell.Tab.0.right/0.0.1500.960@0.0.1500.960" timestamp="1592331761858" />
-    <state width="1877" height="283" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592508922995" />
-    <state width="1877" height="515" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1588744251386" />
-    <state width="1877" height="299" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1588656893277" />
+    <state width="1921" height="303" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598246562455" />
+    <state width="914" height="406" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1593806764724" />
+    <state width="1877" height="204" key="GridCell.Tab.0.right/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1593626621816" />
     <state width="1877" height="32" key="GridCell.Tab.1.bottom" timestamp="1592499880082">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -276,36 +339,52 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="32" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592499880082" />
-    <state x="323" y="134" key="SettingsEditor" timestamp="1592338539397">
+    <state x="323" y="134" key="SettingsEditor" timestamp="1598228500628">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="252" y="124" key="SettingsEditor/0.0.1500.960@0.0.1500.960" timestamp="1592330694304" />
-    <state x="323" y="134" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592338539397" />
-    <state x="656" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1592332737797">
+    <state x="323" y="134" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598228500628" />
+    <state x="323" y="134" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1593580529157" />
+    <state x="656" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1598226964763">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="656" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592332737797" />
+    <state x="656" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598226964763" />
+    <state x="656" y="345" key="com.intellij.ide.util.TipDialog/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1593044822136" />
+    <state x="563" y="222" key="com.jetbrains.plugins.remotesdk.ui.RemoteMappingsConfiguration" timestamp="1598227880810">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="563" y="222" key="com.jetbrains.plugins.remotesdk.ui.RemoteMappingsConfiguration/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598227880810" />
     <state x="1920" y="307" width="1249" height="490" maximized="true" key="dock-window-1" timestamp="1592426208518">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="1920" y="307" width="1249" height="490" maximized="true" key="dock-window-1/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592426208518" />
-    <state x="636" y="213" width="479" height="535" key="ftp.server.browser" timestamp="1592331711171">
-      <screen x="0" y="0" width="1500" height="960" />
+    <state x="656" y="252" width="607" height="536" key="find.popup" timestamp="1592858145202">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="656" y="252" width="607" height="536" key="find.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592858145202" />
+    <state x="814" y="231" width="479" height="535" key="ftp.server.browser" timestamp="1598228170872">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="636" y="213" width="479" height="535" key="ftp.server.browser/0.0.1500.960@0.0.1500.960" timestamp="1592331711171" />
-    <state x="529" y="223" width="861" height="735" key="search.everywhere.popup" timestamp="1592338432768">
+    <state x="814" y="231" key="ftp.server.browser/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598228170871" />
+    <state x="529" y="223" width="861" height="735" key="search.everywhere.popup" timestamp="1598236619693">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="413" y="206" width="672" height="678" key="search.everywhere.popup/0.0.1500.960@0.0.1500.960" timestamp="1592330632204" />
-    <state x="529" y="223" width="861" height="735" key="search.everywhere.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1592338432768" />
+    <state x="529" y="223" width="861" height="735" key="search.everywhere.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598236619693" />
+    <state x="529" y="223" width="861" height="735" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1593580519305" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PhonoNet$helloworld.coverage" NAME="helloworld Coverage Results" MODIFIED="1592332470502" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PhonoNet$ml.coverage" NAME="ml Coverage Results" MODIFIED="1592507109810" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/phononet" />
+    <SUITE FILE_PATH="coverage/PhonoNet$train_carnatic.coverage" NAME="train-carnatic Coverage Results" MODIFIED="1593973662987" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/main_scripts" />
+    <SUITE FILE_PATH="coverage/PhonoNet$ml.coverage" NAME="ml Coverage Results" MODIFIED="1593109498699" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/phononet" />
     <SUITE FILE_PATH="coverage/PhonoNet$data.coverage" NAME="data Coverage Results" MODIFIED="1592502552866" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/phononet" />
-    <SUITE FILE_PATH="coverage/PhonoNet$download_dataset.coverage" NAME="download-dataset Coverage Results" MODIFIED="1592426175575" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PhonoNet$download_dataset.coverage" NAME="download-dataset Coverage Results" MODIFIED="1593874332151" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/temp_scripts" />
+    <SUITE FILE_PATH="coverage/PhonoNet$train__2_.coverage" NAME="train (2) Coverage Results" MODIFIED="1598246562442" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/chunk_size" />
     <SUITE FILE_PATH="coverage/PhonoNet$generate_chroma.coverage" NAME="generate_chroma Coverage Results" MODIFIED="1592508428712" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PhonoNet$train__1_.coverage" NAME="train (1) Coverage Results" MODIFIED="1592508922985" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/main_scripts" />
-    <SUITE FILE_PATH="coverage/PhonoNet$process_json.coverage" NAME="process_json Coverage Results" MODIFIED="1592419894217" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PhonoNet$train__1_.coverage" NAME="train (1) Coverage Results" MODIFIED="1593968845543" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/main_scripts" />
+    <SUITE FILE_PATH="coverage/PhonoNet$t_sne.coverage" NAME="t-sne Coverage Results" MODIFIED="1593583720407" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/main_scripts" />
+    <SUITE FILE_PATH="coverage/PhonoNet$process_json.coverage" NAME="process_json Coverage Results" MODIFIED="1593970704415" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/temp_scripts" />
+    <SUITE FILE_PATH="coverage/PhonoNet$train.coverage" NAME="train Coverage Results" MODIFIED="1598229083694" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/experiments" />
   </component>
 </project>
