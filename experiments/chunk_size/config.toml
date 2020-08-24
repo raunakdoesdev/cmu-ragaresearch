@@ -1,0 +1,11 @@
+[data]
+unit_test = false
+# chroma_folder = '/home/jupyter/ragaresearch/data/cqt_chroma_fixed'
+# chroma_folder = '/home/jupyter/ragaresearch/data/hindustani-cqt-chroma'
+chroma_folder = '/home/jupyter/ragaresearch/data/hindustani-chroma'
+limit_songs = '/home/jupyter/ragaresearch/data/hindustani-limited-songs-list.json'
+metadata = '/home/jupyter/ragaresearch/data/hindustani-metadata.json'
+chunk_size = 1500
+
+[training]
+batch_size = 32
