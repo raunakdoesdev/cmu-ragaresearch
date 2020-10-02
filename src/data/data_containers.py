@@ -138,7 +138,8 @@ class ChromaChunkDataset(Dataset):
         self.raga_ids = full_chroma_dataset.raga_ids
 
         for chroma, raga_id in full_chroma_dataset:
-            unfolded = chroma.split(chunk_size, dim=1)
+            unfolded = chroma.unfold(1, chunk_size, chunk_size//3).permute(1, 0, 2)
+            # unfolded = chroma.split(chunk_size.unsqueeze(0).unsqueeze(0), dim=1)[0]
             for i in range(len(unfolded)):
                 chroma = unfolded[i]
                 if unfolded[i].shape[1] != chunk_size:

@@ -14,7 +14,7 @@ from src.data.data_module import MusicDataModule
 
 config = toml.load('config.toml')
 
-for chunk_size in [500, 750, 1000]:
+for chunk_size in [250, 500, 750, 1000]:
     fcd = FullChromaDataset(json_path=config['data']['metadata'],
                             data_folder=config['data']['chroma_folder'],
                             include_mbids=json.load(open(config['data']['limit_songs'])))
@@ -28,7 +28,7 @@ for chunk_size in [500, 750, 1000]:
 
     model = Phononet.load_from_checkpoint('/home/jupyter/refactor/experiments/aggregation_method/Stage2 Aggregation Tuning/3iwgcz70/checkpoints/epoch=67.ckpt')
     model.hparams.chunk_size = chunk_size
-    logger = WandbLogger(project='Stage2 Chunk Size Tuning', name=f'{chunk_size}')
+    logger = WandbLogger(project='Overlap Chunk Size', name=f'{chunk_size}')
     trainer = Trainer(gpus=1, logger=logger, max_epochs=75,
                       checkpoint_callback=ModelCheckpoint(monitor='val_accuracy', mode='max'), auto_lr_find=True)
 
