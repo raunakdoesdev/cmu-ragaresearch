@@ -2,12 +2,12 @@ from collections import OrderedDict
 
 import torch.nn as nn
 import torch.nn.functional as F
-
+from torchsummary import summary
 from src.training import Boilerplate
 
 
 class Phononet(Boilerplate):
-    def __init__(self, dropout=0.1):
+    def __init__(self):
         super(Phononet, self).__init__()
         self.encoder = nn.Sequential(OrderedDict([
             ('init_norm', nn.BatchNorm2d(1)),
@@ -22,25 +22,25 @@ class Phononet(Boilerplate):
             ('relu1', nn.LeakyReLU()),
             ('norm1', nn.BatchNorm2d(64)),
             ('pool1', nn.MaxPool2d([1, 2])),
-            ('drop1', nn.Dropout(p=dropout)),
+            ('drop1', nn.Dropout(p=0.1)),
 
             ('conv2', nn.Conv2d(64, 128, 3, padding=1)),
             ('relu2', nn.LeakyReLU()),
             ('norm2', nn.BatchNorm2d(128)),
             ('pool2', nn.MaxPool2d([1, 3])),
-            ('drop2', nn.Dropout(p=dropout)),
+            ('drop2', nn.Dropout(p=0.1)),
 
             ('conv3', nn.Conv2d(128, 150, 3, padding=1)),
             ('relu3', nn.LeakyReLU()),
             ('norm3', nn.BatchNorm2d(150)),
             ('pool3', nn.MaxPool2d([4, 2])),
-            ('drop3', nn.Dropout(p=dropout)),
+            ('drop3', nn.Dropout(p=0.1)),
 
             ('conv4', nn.Conv2d(150, 200, 3, padding=1)),
             ('relu4', nn.LeakyReLU()),
             ('norm4', nn.BatchNorm2d(200)),
             ('gba', nn.AdaptiveAvgPool2d([1, 1])),
-            ('drop4', nn.Dropout(p=dropout))
+            ('drop4', nn.Dropout(p=0.1))
         ]))
 
         self.fc1 = nn.Linear(200, 40)
@@ -52,3 +52,7 @@ class Phononet(Boilerplate):
         x = self.fc1(x)
         x = F.log_softmax(x, dim=1)
         return x
+
+if __name__ == '__main__':
+    phononet = Phononet().cuda()
+    print(summary(phononet, (12, 500)))

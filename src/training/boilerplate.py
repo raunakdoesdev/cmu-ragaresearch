@@ -46,12 +46,23 @@ class Boilerplate(pl.LightningModule):
         return {'accuracy': self.accuracy(y_pred, y_true),
                 'f1': f1_score(y_pred, y_true)}
 
+    # def test_step(self, batch, batch_idx):
+    #     x, y_true = batch
+    #     x = chunk_chroma(x.squeeze(), chunk_size=self.hparams.chunk_size)
+    #     y_score = torch.mean(self(x), dim=0, keepdim=True)
+    #     _, y_pred = torch.max(y_score, 1)
+    #     return {'y_score': y_score, 'y_pred': y_pred, 'y_true': y_true}
+
     def test_step(self, batch, batch_idx):
         x, y_true = batch
         x = chunk_chroma(x.squeeze(), chunk_size=self.hparams.chunk_size)
-        y_score = torch.mean(self(x), dim=0, keepdim=True)
+        y_score = self.aggregation_fn(self(x), y_true)
         _, y_pred = torch.max(y_score, 1)
         return {'y_score': y_score, 'y_pred': y_pred, 'y_true': y_true}
+
+    def aggregation_fn(self, x, y_true):
+        return torch.mean(x, dim=0, keepdim=True)
+
 
     def test_visualizations(self, y_score, y_pred, y_true):
         raise NotImplementedError('Override this function with your own visualizations!')
