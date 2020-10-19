@@ -21,17 +21,15 @@ fcd = FullChromaDataset(json_path=config['data']['metadata'],
                         data_folder=config['data']['chroma_folder'],
                         include_mbids=json.load(open(config['data']['limit_songs'])))
 
-fcd_train, fcd_not_train = fcd.train_test_split(train_size=0.70)
-fcd_val, fcd_test = fcd_not_train.train_test_split(test_size=0.5)
+train, fcd_not_train = fcd.train_test_split(train_size=0.70)
+val, test = fcd_not_train.train_test_split(test_size=0.5)
 
-train = ChromaChunkDataset(fcd_train, chunk_size=chunk_size, augmentation=transpose_chromagram, stride=chunk_size)
-val = ChromaChunkDataset(fcd_val, chunk_size=chunk_size, chunkify=False)
-data = MusicDataModule(train, val, test_set=fcd_val, batch_size=config['training']['batch_size'])
+data = MusicDataModule(train, val, test_set=test, batch_size=1)
 
 model = BlockedPhononet()
 model.hparams.chunk_size = chunk_size
 logger = WandbLogger(project='Chunking', name=f'CS=500,No Overlap')
-trainer = Trainer(gpus=1, logger=logger, max_epochs=100000)
-model.hparams.lr = 0.03
-print(f'Setting LR to {model.hparams.lr}')
+trainer = Trainer(gpus=1, logger=logger, max_epochs=100000, num_sanity_val_steps=0, auto_lr_find='lr')
+# model.hparams.lr = 0.03
+# print(f'Setting LR to {model.hparams.lr}')
 trainer.fit(model, data)

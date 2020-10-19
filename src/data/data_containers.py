@@ -1,3 +1,4 @@
+from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset
 import torch
 import pickle
@@ -6,6 +7,9 @@ import os
 import json
 import copy
 from tqdm.auto import tqdm
+import numpy as np
+import torch.nn.functional as F
+
 
 class FullChromaDataset(Dataset):
     """
@@ -60,7 +64,7 @@ class FullChromaDataset(Dataset):
         self.X = []
         self.y = []
         for file in tqdm(self.files, desc="Loading Chromagram Files"):
-            self.X.append(torch.FloatTensor(pickle.load(open(file, 'rb'))))
+            self.X.append(F.avg_pool2d(torch.FloatTensor(pickle.load(open(file, 'rb'))).unsqueeze(0), [1, 10]).squeeze())
             self.y.append(self._get_raga_id(file))
 
     @classmethod
@@ -123,7 +127,8 @@ class FullChromaDataset(Dataset):
 
 
 class ChromaChunkDataset(Dataset):
-    def __init__(self, full_chroma_dataset: FullChromaDataset, chunk_size, augmentation=None):
+    def __init__(self, full_chroma_dataset: FullChromaDataset, chunk_size, augmentation=None, random_crop=False,
+                 chunkify=True, stride=10):
         """
         Class for chunkifying an existing full chroma dataset
 
@@ -132,29 +137,36 @@ class ChromaChunkDataset(Dataset):
         :param augmentation: function that the chunks are passed through before calling get_item (user defined)
         """
 
-        self.X = []
-        self.y = []
         self.augmentation = augmentation
+        self.random_crop = random_crop
+
+        if not self.random_crop and chunkify:
+            self.X = []
+            self.y = []
+            for chroma, raga_id in tqdm(full_chroma_dataset):
+                unfolded = chroma.unfold(1, chunk_size, stride).permute(1, 0, 2)
+                # unfolded = chroma.split(chunk_size.unsqueeze(0).unsqueeze(0), dim=1)[0]
+                for i in range(len(unfolded)):
+                    chroma = unfolded[i]
+                    if unfolded[i].shape[1] != chunk_size:
+                        padding = torch.zeros(unfolded[i].shape[0], chunk_size - unfolded[i].shape[1])
+                        chroma = torch.cat((unfolded[i], padding), 1)
+                    self.X.append(chroma.unsqueeze(0))
+                self.y += len(unfolded) * [raga_id]
+            self.X = torch.cat(self.X, dim=0)
+        else:
+            self.X = full_chroma_dataset.X
+            self.y = full_chroma_dataset.y
+
+        self.chunk_size = chunk_size
         self.raga_ids = full_chroma_dataset.raga_ids
 
-        for chroma, raga_id in full_chroma_dataset:
-            unfolded = chroma.unfold(1, chunk_size, chunk_size//3).permute(1, 0, 2)
-            # unfolded = chroma.split(chunk_size.unsqueeze(0).unsqueeze(0), dim=1)[0]
-            for i in range(len(unfolded)):
-                chroma = unfolded[i]
-                if unfolded[i].shape[1] != chunk_size:
-                    padding = torch.zeros(unfolded[i].shape[0], chunk_size - unfolded[i].shape[1])
-                    chroma = torch.cat((unfolded[i], padding), 1)
-                self.X.append(chroma.unsqueeze(0))
-            self.y += len(unfolded) * [raga_id]
-
-        self.X = torch.cat(self.X, dim=0)
-
     def __getitem__(self, item):
-        if self.augmentation is None:
-            return self.X[item], self.y[item]
-        else:
-            return self.augmentation(self.X[item]), self.y[item]
+        x = self.X[item]
+        if self.random_crop:
+            crop_start = np.random.randint(0, x.shape[1] - self.chunk_size)
+            x = x[:, crop_start:crop_start + self.chunk_size]
+        return x if self.augmentation is None else self.augmentation(x), self.y[item]
 
     def __len__(self):
         return len(self.y)

@@ -17,13 +17,14 @@ class Boilerplate(pl.LightningModule):
 
     def __init__(self):
         super(Boilerplate, self).__init__()
-        self.hparams = coll.AttributeDict({'learning_rate': 0.01})
+        self.hparams = coll.AttributeDict({'lr': 0.01})
 
     def forward(self, x):
         raise NotImplementedError('Override me!')
 
     def validation_step(self, batch, batch_idx):
         x, y_true = batch
+        x = x.unsqueeze(0)
         y_score = self(x)
         _, y_pred = torch.max(y_score, 1)
 
@@ -63,7 +64,6 @@ class Boilerplate(pl.LightningModule):
     def aggregation_fn(self, x, y_true):
         return torch.mean(x, dim=0, keepdim=True)
 
-
     def test_visualizations(self, y_score, y_pred, y_true):
         raise NotImplementedError('Override this function with your own visualizations!')
 
@@ -77,7 +77,7 @@ class Boilerplate(pl.LightningModule):
         return {}
 
     def training_step(self, batch, batch_idx):
-        x, y_true = batch
+        x, y_true = batch  # full song from data loader
         y_score = self(x)
         ret = {'loss': F.nll_loss(y_score, y_true)}
         _, y_pred = torch.max(y_score, 1)
@@ -88,16 +88,16 @@ class Boilerplate(pl.LightningModule):
 
         return ret
 
-    def training_epoch_end(self, outputs):
-        # Get y_score / y_pred
-        y_score = torch.cat([x['y_score'] for x in outputs])
-        y_pred = torch.cat([x['y_pred'] for x in outputs])
-        y_true = torch.cat([x['y_true'] for x in outputs])
-
-        log = {'train_' + k: v for k, v in self.get_metrics(y_pred, y_true).items()}
-        log['step'] = self.current_epoch
-        log['log'] = copy.deepcopy(log)
-        return log
+    # def training_epoch_end(self, outputs):
+    #     # Get y_score / y_pred
+    #     y_score = torch.cat([x['y_score'] for x in outputs])
+    #     y_pred = torch.cat([x['y_pred'] for x in outputs])
+    #     y_true = torch.cat([x['y_true'] for x in outputs])
+    #
+    #     log = {'train_' + k: v for k, v in self.get_metrics(y_pred, y_true).items()}
+    #     log['step'] = self.current_epoch
+    #     log['log'] = copy.deepcopy(log)
+    #     return log
 
     def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
+        return torch.optim.Adam(self.parameters(), lr=self.hparams.lr)
