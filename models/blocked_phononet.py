@@ -76,15 +76,15 @@ class BlockedPhononet(Boilerplate):
 
         ret = {}
         # x will have shape 1, 12, 200 (batch size = 1)
-        y_score = self.forward(x.unsqueeze(0))
-        loss = 3 * F.nll_loss(y_score, y_true)
-        _, y_pred = torch.max(y_score, 1)
-        ret['y_score'] = y_score
-        ret['y_pred'] = y_pred
-        ret['y_true'] = y_true
+        # y_score = self.forward(x.unsqueeze(0))
+        loss = 0 # 3 * F.nll_loss(y_score, y_true)
+        # _, y_pred = torch.max(y_score, 1)
+        # ret['y_score'] = y_score
+        # ret['y_pred'] = y_pred
+        # ret['y_true'] = y_true
 
         count = 0
-        for i, chunk_size in enumerate([100, 250]):
+        for i, chunk_size in enumerate([75]):
             if chunk_size > x.shape[2]:
                 continue
             count += 1

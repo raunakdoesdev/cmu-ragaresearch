@@ -64,6 +64,7 @@ class FullChromaDataset(Dataset):
         self.X = []
         self.y = []
         for file in tqdm(self.files, desc="Loading Chromagram Files"):
+            # self.X.append(torch.FloatTensor(pickle.load(open(file, 'rb'))).unsqueeze(0).squeeze())
             self.X.append(F.avg_pool2d(torch.FloatTensor(pickle.load(open(file, 'rb'))).unsqueeze(0), [1, 10]).squeeze())
             self.y.append(self._get_raga_id(file))
 
@@ -148,9 +149,6 @@ class ChromaChunkDataset(Dataset):
                 # unfolded = chroma.split(chunk_size.unsqueeze(0).unsqueeze(0), dim=1)[0]
                 for i in range(len(unfolded)):
                     chroma = unfolded[i]
-                    if unfolded[i].shape[1] != chunk_size:
-                        padding = torch.zeros(unfolded[i].shape[0], chunk_size - unfolded[i].shape[1])
-                        chroma = torch.cat((unfolded[i], padding), 1)
                     self.X.append(chroma.unsqueeze(0))
                 self.y += len(unfolded) * [raga_id]
             self.X = torch.cat(self.X, dim=0)

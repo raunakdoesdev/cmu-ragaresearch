@@ -24,7 +24,7 @@ class Boilerplate(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         x, y_true = batch
-        x = x.unsqueeze(0)
+        # x = x.unsqueeze(0)
         y_score = self(x)
         _, y_pred = torch.max(y_score, 1)
 
