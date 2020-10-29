@@ -1,11 +1,11 @@
-import pytorch_lightning as pl
-import pytorch_lightning.metrics
-import torch
-import torch.nn.functional as F
-from pytorch_lightning.metrics.functional import *
 import copy
 
 import attributedict.collections as coll
+import pytorch_lightning as pl
+import torch
+import torch.nn.functional as F
+from torch.optim import Adadelta
+from pytorch_lightning.metrics.functional import *
 
 from src import chunk_chroma
 
@@ -88,16 +88,6 @@ class Boilerplate(pl.LightningModule):
 
         return ret
 
-    # def training_epoch_end(self, outputs):
-    #     # Get y_score / y_pred
-    #     y_score = torch.cat([x['y_score'] for x in outputs])
-    #     y_pred = torch.cat([x['y_pred'] for x in outputs])
-    #     y_true = torch.cat([x['y_true'] for x in outputs])
-    #
-    #     log = {'train_' + k: v for k, v in self.get_metrics(y_pred, y_true).items()}
-    #     log['step'] = self.current_epoch
-    #     log['log'] = copy.deepcopy(log)
-    #     return log
-
     def configure_optimizers(self):
+        # return torch.optim.Adadelta(self.parameters())
         return torch.optim.Adam(self.parameters(), lr=self.hparams.lr)

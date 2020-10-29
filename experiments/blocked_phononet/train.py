@@ -1,15 +1,12 @@
-import toml
+from multiprocessing import cpu_count
+
 import pytorch_lightning as pl
-import pytorch_lightning.metrics
+import toml
 from pytorch_lightning import Trainer
-from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
-import wandb
-from pytorch_lightning.metrics.functional import *
-import plotly.express as px
-import numpy as np
+from torch.utils.data import DataLoader, ConcatDataset
+
 from models.blocked_phononet import BlockedPhononet
-from torch.utils.data import DataLoader
 from src import *
 from src.data.data_module import MusicDataModule
 
@@ -22,11 +19,48 @@ fcd = FullChromaDataset(json_path=config['data']['metadata'],
 train, fcd_not_train = fcd.train_test_split(train_size=0.70)
 val, test = fcd_not_train.train_test_split(test_size=0.5)
 
-data = MusicDataModule(train, val, test_set=test, batch_size=1)
+chunk_sizes = (50, 75, 100)
+strides = (10, 10, 10)
+chunked_data = [ChromaChunkDataset(train, chunk_size=chunk_size, augmentation=transpose_chromagram, stride=stride)
+                for chunk_size, stride in zip(chunk_sizes, strides)]
 
+
+def blocked_collate(batch):
+    separated = {chunk_size: [] for chunk_size in chunk_sizes}
+    for x, y in batch:
+        separated[x.shape[1]].append((x, torch.LongTensor([y])))
+    ret = []
+    for chunk_size in chunk_sizes:
+        if len(separated[chunk_size]) > 0:
+            x = torch.stack([x for x, y in separated[chunk_size]])
+            y = torch.stack([y for x, y in separated[chunk_size]]).squeeze(1)  # remove singleton dim
+            ret.append((x, y))
+        else:
+            ret.append([])
+    return ret
+
+
+train = ConcatDataset(chunked_data)
+
+
+class BlockedMusicDataModule(pl.LightningDataModule):
+    def __init__(self):
+        super().__init__()
+
+    def train_dataloader(self):
+        return DataLoader(train, batch_size=32, shuffle=True,
+                          num_workers=cpu_count(),
+                          collate_fn=blocked_collate,
+                          pin_memory=True)
+
+    def val_dataloader(self):
+        return DataLoader(val, batch_size=1, num_workers=cpu_count(),
+                          pin_memory=True)
+
+
+data = BlockedMusicDataModule()
 model = BlockedPhononet()
-logger = WandbLogger(project='Chunking', name=f'Simple Blocked PhonoNet')
-trainer = Trainer(gpus=1, logger=logger, max_epochs=100000, num_sanity_val_steps=0, auto_lr_find='lr')
-# model.hparams.lr = 0.03
-# print(f'Setting LR to {model.hparams.lr}')
+
+logger = WandbLogger(project='BlockedPhononet', name=f'New Dataset BlockedPhononet')
+trainer = Trainer(gpus=1, logger=logger, max_epochs=100000, num_sanity_val_steps=2, auto_lr_find='lr')
 trainer.fit(model, data)

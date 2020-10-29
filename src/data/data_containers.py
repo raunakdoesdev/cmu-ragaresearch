@@ -145,12 +145,14 @@ class ChromaChunkDataset(Dataset):
             self.X = []
             self.y = []
             for chroma, raga_id in tqdm(full_chroma_dataset):
-                unfolded = chroma.unfold(1, chunk_size, stride).permute(1, 0, 2)
-                # unfolded = chroma.split(chunk_size.unsqueeze(0).unsqueeze(0), dim=1)[0]
-                for i in range(len(unfolded)):
-                    chroma = unfolded[i]
-                    self.X.append(chroma.unsqueeze(0))
-                self.y += len(unfolded) * [raga_id]
+                try:
+                    unfolded = chroma.unfold(1, chunk_size, stride).permute(1, 0, 2)
+                    for i in range(len(unfolded)):
+                        chroma = unfolded[i]
+                        self.X.append(chroma.unsqueeze(0))
+                    self.y += len(unfolded) * [raga_id]
+                except:
+                    pass
             self.X = torch.cat(self.X, dim=0)
         else:
             self.X = full_chroma_dataset.X

@@ -66,37 +66,29 @@ class BlockedPhononet(Boilerplate):
         ]))
 
     def forward(self, x, num_layers=3):
+        x = x.unsqueeze(1)
+
         for i in range(num_layers - 1):
             x = self.blocks[i](x)
 
         return self.blocks[num_layers - 1](x, output_prob=True)
 
     def training_step(self, batch, batch_idx):
-        x, y_true = batch  # full song from data loader
-
-        ret = {}
-        # x will have shape 1, 12, 200 (batch size = 1)
-        # y_score = self.forward(x.unsqueeze(0))
-        loss = 0 # 3 * F.nll_loss(y_score, y_true)
-        # _, y_pred = torch.max(y_score, 1)
-        # ret['y_score'] = y_score
-        # ret['y_pred'] = y_pred
-        # ret['y_true'] = y_true
-
-        count = 0
-        for i, chunk_size in enumerate([75]):
-            if chunk_size > x.shape[2]:
+        loss = 0
+        div = 0
+        for i, single_batch in enumerate(batch):  # iterate through multiple chunk sizes
+            if len(single_batch) != 2:
                 continue
-            count += 1
-            unfolded = x.unfold(2, chunk_size, chunk_size).permute(2, 0, 1, 3)
-            # print(unfolded.shape)
-            y_score = self.forward(unfolded, num_layers=i + 1)
-            loss += F.nll_loss(y_score, torch.cat(len(unfolded) * [y_true]))
-        #
-        # y_score = self(x)
-        ret['loss'] = loss / (count + 3)
-        #
-        return ret
+            x, y_true = single_batch
+            try:
+                y_score = self.forward(x, num_layers=i + 1)
+                loss += F.nll_loss(y_score, y_true) * len(y_true)
+                div += len(y_true)
+            except Exception as e:
+                import traceback
+                print(traceback.format_exc())
+
+        return {'loss': loss / div}
 
 
 if __name__ == '__main__':
