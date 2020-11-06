@@ -9,6 +9,8 @@ from torch.utils.data import DataLoader, ConcatDataset
 from models.blocked_phononet import BlockedPhononet
 from src import *
 
+pl.seed_everything(42)
+
 config = toml.load('config.toml')
 
 fcd = FullChromaDataset(json_path=config['data']['metadata'],
@@ -61,5 +63,7 @@ data = BlockedMusicDataModule()
 model = BlockedPhononet()
 
 logger = WandbLogger(project='BlockedPhononet')
-trainer = Trainer(gpus=1, logger=logger, max_epochs=100000, num_sanity_val_steps=2, auto_lr_find='lr')
+trainer = Trainer(gpus=1, logger=logger, max_epochs=100000, num_sanity_val_steps=2, deterministic=True,
+                  val_check_interval=0.1, auto_lr_find=False)
+model.lr = 0.000912
 trainer.fit(model, data)
