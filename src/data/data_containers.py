@@ -23,9 +23,9 @@ class FullChromaDataset(Dataset):
         """
 
         mbids = [os.path.basename(file_name).split('.')[0] for file_name in self.files]
-        raga_ids = {self.metadata[mbid]['raags'][0]['common_name'] for mbid in mbids}
+        raga_ids = {self.metadata[mbid][self.raga_key][0]['common_name'] for mbid in mbids}
         raga_ids = sorted(raga_ids)
-        self.raga_ids = {k: v for v, k in enumerate(raga_ids)}
+        self.raga_ids = {k: v + self.raga_id_offset for v, k in enumerate(raga_ids)}
 
     def _get_raga_id(self, file):
         """
@@ -35,9 +35,9 @@ class FullChromaDataset(Dataset):
         if not hasattr(self, 'raga_ids') or self.raga_ids is None:
             self._assign_raga_ids()
         mbid = os.path.basename(file).split('.')[0]
-        return self.raga_ids[self.metadata[mbid]['raags'][0]['common_name']]
+        return self.raga_ids[self.metadata[mbid][self.raga_key][0]['common_name']]
 
-    def __init__(self, json_path, data_folder, include_mbids=None):
+    def __init__(self, json_path, data_folder, include_mbids=None, carnatic=False, raga_id_offset=0):
         """
         Creates a new dataset object.
 
@@ -45,6 +45,13 @@ class FullChromaDataset(Dataset):
         :param data_folder: folder with all of the chromagrams inside
         :param include_mbids: list of song ids to include
         """
+
+        self.raga_id_offset = raga_id_offset
+        if carnatic:
+            self.raga_key = 'raaga'
+        else:
+            self.raga_key = 'raags'
+
         self.files = glob.glob(os.path.join(data_folder, '**/*.pkl'))
         self.files += glob.glob(os.path.join(data_folder, '*.pkl'))
         self.metadata = json.load(open(json_path, 'r'))

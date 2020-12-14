@@ -27,7 +27,7 @@ class ConvBlock(nn.Module):
 
 
 class Block(nn.Module):
-    def __init__(self, in_channels, out_channels, num_predict_features=300):
+    def __init__(self, in_channels, out_channels, num_predict_features=300, num_out=30):
         super(Block, self).__init__()
         # intermediate1 = in_channels + (out_channels - in_channels) // 3
         # intermediate2 = in_channels + 2 * (out_channels - in_channels) // 3
@@ -39,7 +39,7 @@ class Block(nn.Module):
         ]))
         self.conv1x1 = nn.Conv2d(out_channels, num_predict_features, kernel_size=1)
         self.gap = nn.AdaptiveAvgPool2d([1, 1])
-        self.fc1 = nn.Linear(num_predict_features, 30)
+        self.fc1 = nn.Linear(num_predict_features, num_out)
 
     def pred_block(self, x):
         x = self.conv1x1(x)
@@ -57,15 +57,15 @@ class Block(nn.Module):
 
 
 class BlockedPhononet(Boilerplate):
-    def __init__(self, ):
+    def __init__(self, num_out=30):
         super(BlockedPhononet, self).__init__()
         self.blocks = nn.Sequential(OrderedDict([
-            ('block1', Block(1, 128)),
-            ('block2', Block(128, 512)),
-            ('block3', Block(512, 512))
+            ('block1', Block(1, 128, num_out=num_out)),
+            ('block2', Block(128, 512, num_out=num_out)),
+            ('block3', Block(512, 512, num_out=num_out))
         ]))
 
-    def forward(self, x, num_layers=3):
+    def forward(self, x, num_layers=3, keepall=False):
         x = x.unsqueeze(1)
 
         for i in range(num_layers - 1):
@@ -77,7 +77,7 @@ class BlockedPhononet(Boilerplate):
         loss = 0
         div = 0
         for i, single_batch in enumerate(batch):  # iterate through multiple chunk sizes
-            if len(single_batch) != 2:
+            if len(single_batch) != 2:   # check if empty
                 continue
             x, y_true = single_batch
             try:

@@ -35,3 +35,4 @@ trainer = Trainer(gpus=1, logger=logger, max_epochs=100000)
 model.hparams.lr = 0.03
 print(f'Setting LR to {model.hparams.lr}')
 trainer.fit(model, data)
+

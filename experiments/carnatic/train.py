@@ -15,14 +15,19 @@ config = toml.load('config.toml')
 
 fcd = FullChromaDataset(json_path=config['data']['metadata'],
                         data_folder=config['data']['chroma_folder'],
-                        include_mbids=json.load(open(config['data']['limit_songs'])))
+                        include_mbids=json.load(open(config['data']['limit_songs'])), carnatic=True)
 
 train, fcd_not_train = fcd.train_test_split(train_size=0.70)
 val, test = fcd_not_train.train_test_split(test_size=0.5)
 
+chunk_sizes = (50, 75, 100,)
 strides = (10, 10, 10)
-chunked_data = [ChromaChunkDataset(train, chunk_size=chunk_size, augmentation=transpose_chromagram, stride=stride)
+chunked_data = [ChromaChunkDataset(train, chunk_size=chunk_size, stride=stride)
                 for chunk_size, stride in zip(chunk_sizes, strides)]
+
+chunk_sizes = (50, 75, 100)
+
+
 
 def blocked_collate(batch):
     separated = {chunk_size: [] for chunk_size in chunk_sizes}
@@ -58,9 +63,9 @@ class BlockedMusicDataModule(pl.LightningDataModule):
 
 
 data = BlockedMusicDataModule()
-model = BlockedPhononet()
+model = BlockedPhononet(num_out=max(fcd.y) + 1)
 
-logger = WandbLogger(project='BlockedPhononet')
+logger = WandbLogger(project='CarnaticPhononet', name='First Attempt')
 trainer = Trainer(gpus=1, logger=logger, max_epochs=100000, num_sanity_val_steps=2, deterministic=True,
                   val_check_interval=0.1, auto_lr_find=False)
 model.lr = 0.000912

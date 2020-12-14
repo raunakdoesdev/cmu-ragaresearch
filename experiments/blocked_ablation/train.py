@@ -20,9 +20,13 @@ fcd = FullChromaDataset(json_path=config['data']['metadata'],
 train, fcd_not_train = fcd.train_test_split(train_size=0.70)
 val, test = fcd_not_train.train_test_split(test_size=0.5)
 
-strides = (10, 10, 10)
-chunked_data = [ChromaChunkDataset(train, chunk_size=chunk_size, augmentation=transpose_chromagram, stride=stride)
+chunk_sizes = (50, 75, 100,)
+strides = (10, 10, 10,)
+chunked_data = [ChromaChunkDataset(train, chunk_size=chunk_size, stride=stride)
                 for chunk_size, stride in zip(chunk_sizes, strides)]
+
+chunk_sizes = (50, 75, 100)
+
 
 def blocked_collate(batch):
     separated = {chunk_size: [] for chunk_size in chunk_sizes}
@@ -57,11 +61,13 @@ class BlockedMusicDataModule(pl.LightningDataModule):
                           pin_memory=True)
 
 
+
 data = BlockedMusicDataModule()
 model = BlockedPhononet()
 
-logger = WandbLogger(project='BlockedPhononet')
+logger = WandbLogger(project='BlockedPhononetAblation', name='Full + No Dropout')
 trainer = Trainer(gpus=1, logger=logger, max_epochs=100000, num_sanity_val_steps=2, deterministic=True,
                   val_check_interval=0.1, auto_lr_find=False)
 model.lr = 0.000912
 trainer.fit(model, data)
+

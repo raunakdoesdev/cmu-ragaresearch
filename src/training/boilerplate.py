@@ -33,12 +33,18 @@ class Boilerplate(pl.LightningModule):
     def validation_epoch_end(self, outputs):
         # Get y_score / y_pred
         y_score = torch.cat([x['y_score'] for x in outputs])
+
         y_pred = torch.cat([x['y_pred'] for x in outputs])
         y_true = torch.cat([x['y_true'] for x in outputs])
 
-        log = {'val_' + k: v for k, v in self.get_metrics(y_score, y_true).items()}
+        # log = {'val_' + k: v for k, v in self.get_metrics(y_score, y_true).items()}
+        log = self.get_val_metrics(y_score, y_true)
         log['step'] = self.current_epoch
         log['log'] = copy.deepcopy(log)
+        return log
+
+    def get_val_metrics(self, y_score, y_true):
+        log = {'val_' + k: v for k, v in self.get_metrics(y_score, y_true).items()}
         return log
 
     def get_metrics(self, y_score, y_true):
@@ -60,8 +66,8 @@ class Boilerplate(pl.LightningModule):
         print(output.shape)
         _, pred = output.topk(maxk, dim=1)
         pred = pred.t()
-        correct = pred.eq(target.view(1, -1).expand_as(pred))
-        return [correct[:k].view(-1).float().sum(0) / batch_size for k in topk]
+        correct = pred.eq(target.reshape(1, -1).expand_as(pred))
+        return [correct[:k].reshape(-1).float().sum(0) / batch_size for k in topk]
 
     # def test_step(self, batch, batch_idx):
     #     x, y_true = batch
