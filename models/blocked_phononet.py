@@ -66,7 +66,8 @@ class BlockedPhononet(Boilerplate):
         ]))
 
     def forward(self, x, num_layers=3, keepall=False):
-        x = x.unsqueeze(1)
+        if len(x.shape) == 3:
+            x = x.unsqueeze(1)
 
         for i in range(num_layers - 1):
             x = self.blocks[i](x)
@@ -92,5 +93,5 @@ class BlockedPhononet(Boilerplate):
 
 
 if __name__ == '__main__':
-    phononet = BlockedPhononet()
-    print(summary(phononet, (1, 12, 500)))
+    model = BlockedPhononet()
+    print(summary(model, (1, 12, 5000)))

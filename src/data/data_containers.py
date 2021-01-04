@@ -24,7 +24,7 @@ class FullChromaDataset(Dataset):
 
         mbids = [os.path.basename(file_name).split('.')[0] for file_name in self.files]
         raga_ids = {self.metadata[mbid][self.raga_key][0]['common_name'] for mbid in mbids}
-        raga_ids = sorted(raga_ids)
+        raga_ids = sorted(raga_ids, key=lambda id: id.lower())
         self.raga_ids = {k: v + self.raga_id_offset for v, k in enumerate(raga_ids)}
 
     def _get_raga_id(self, file):
@@ -70,19 +70,23 @@ class FullChromaDataset(Dataset):
 
         self.X = []
         self.y = []
+        self.mbids = []
         for file in tqdm(self.files, desc="Loading Chromagram Files"):
             # self.X.append(torch.FloatTensor(pickle.load(open(file, 'rb'))).unsqueeze(0).squeeze())
-            self.X.append(F.avg_pool2d(torch.FloatTensor(pickle.load(open(file, 'rb'))).unsqueeze(0), [1, 10]).squeeze())
+            self.X.append(
+                F.avg_pool2d(torch.FloatTensor(pickle.load(open(file, 'rb'))).unsqueeze(0), [1, 10]).squeeze())
             self.y.append(self._get_raga_id(file))
+            self.mbids.append(os.path.basename(file).split('.pkl')[0])
 
     @classmethod
-    def init_x_y(cls, X, y, raga_ids):
+    def init_x_y(cls, X, y, raga_ids, mbids=[]):
         """
         Helper method. Bypasses default constructor to allow for construction with just X and y objects directly.
         """
         obj = cls.__new__(cls)
         obj.X = X
         obj.y = y
+        obj.mbids = mbids
         obj.raga_ids = raga_ids
         return obj
 
@@ -114,24 +118,26 @@ class FullChromaDataset(Dataset):
 
         # Split Samples by Raga
         samples_by_raga = [[] for i in range(len(self.raga_ids))]
-        for X, y in self:
-            samples_by_raga[y].append(X)
-        X_train, y_train = [], []
-        X_test, y_test = [], []
+        for X, y, mbid in zip(self.X, self.y, self.mbids):
+            samples_by_raga[y].append((X, mbid))
+        X_train, y_train, mbid_train = [], [], []
+        X_test, y_test, mbid_test = [], [], []
         for raga, samples in enumerate(samples_by_raga):
             train_len, test_len = 0, 0
-            for sample in sorted(samples, reverse=True, key=lambda sample: len(sample[0])):
+            for sample, mbid in sorted(samples, reverse=True, key=lambda sample: len(sample[0][0])):
                 if train_len <= test_len:
                     X_train.append(sample)
                     y_train.append(raga)
+                    mbid_train.append(mbid)
                     train_len += len(sample[0]) * (test_size / train_size)
                 else:
                     X_test.append(sample)
                     y_test.append(raga)
+                    mbid_test.append(mbid)
                     test_len += len(sample[0])
 
-        return FullChromaDataset.init_x_y(X_train, y_train, self.raga_ids), FullChromaDataset.init_x_y(X_test, y_test,
-                                                                                                       self.raga_ids)
+        return FullChromaDataset.init_x_y(X_train, y_train, self.raga_ids, mbids=mbid_train), \
+               FullChromaDataset.init_x_y(X_test, y_test, self.raga_ids, mbids=mbid_test)
 
 
 class ChromaChunkDataset(Dataset):
