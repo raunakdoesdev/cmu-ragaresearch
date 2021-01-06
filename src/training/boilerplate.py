@@ -18,6 +18,7 @@ class Boilerplate(pl.LightningModule):
     def __init__(self):
         super(Boilerplate, self).__init__()
         self.hparams = coll.AttributeDict({'lr': 0.01})
+        self.epochs = 100
 
     def forward(self, x):
         raise NotImplementedError('Override me!')
@@ -111,5 +112,7 @@ class Boilerplate(pl.LightningModule):
         return ret
 
     def configure_optimizers(self):
-        # return torch.optim.Adadelta(self.parameters())
-        return torch.optim.Adam(self.parameters(), lr=self.hparams.lr)
+        print(f'{self.epochs} = planned # of epochs')
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.hparams.lr)
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, self.epochs)
+        return [optimizer], [scheduler]
