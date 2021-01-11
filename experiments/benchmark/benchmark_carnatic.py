@@ -3,7 +3,7 @@ from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
 
-from models.custom_resnet import ResNet50
+from models.custom_resnet import *
 from src import *
 from src.data.data_module import MusicDataModule
 
@@ -18,13 +18,13 @@ val, test = fcd_not_train.greedy_split(test_size=0.5)
 
 train = ChromaChunkDataset(train, chunk_size=100, augmentation=transpose_chromagram, stride=10)
 data = MusicDataModule(train, val, batch_size=32)
-model = ResNet50(num_classes=max(fcd.y) + 1)
+model = ResNet101(num_classes=max(fcd.y) + 1)
 model.epochs = 50
 
 logger = WandbLogger(project='Raga Benchmark', name='Carnatic Training')
 checkpoint_callback = ModelCheckpoint(
     monitor='val_accuracy',
-    filepath=os.path.join(os.getcwd(), 'checkpoints/carnatic-training-{epoch:02d}-{val_accuracy:.2f}'),
+    filepath=os.path.join(os.getcwd(), 'checkpoints/carnatic101-training-{epoch:02d}-{val_accuracy:.2f}'),
     save_top_k=3,
     mode='max',
     verbose=True

@@ -79,8 +79,7 @@ class Boilerplate(pl.LightningModule):
 
     def test_step(self, batch, batch_idx):
         x, y_true = batch
-        x = chunk_chroma(x.squeeze(), chunk_size=self.hparams.chunk_size)
-        y_score = self.aggregation_fn(self(x), y_true)
+        y_score = self(x)
         _, y_pred = torch.max(y_score, 1)
         return {'y_score': y_score, 'y_pred': y_pred, 'y_true': y_true}
 
@@ -97,7 +96,9 @@ class Boilerplate(pl.LightningModule):
         y_true = torch.cat([x['y_true'] for x in outputs])
 
         self.test_visualizations(y_score, y_pred, y_true)
-        return {}
+        log = self.get_val_metrics(y_score, y_true)
+        log['log'] = copy.deepcopy(log)
+        return log
 
     def training_step(self, batch, batch_idx):
         x, y_true = batch  # full song from data loader
