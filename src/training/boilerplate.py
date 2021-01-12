@@ -8,7 +8,8 @@ from torch.optim import Adadelta
 from pytorch_lightning.metrics.functional import *
 
 from src import chunk_chroma
-
+import wandb
+from sklearn.metrics import f1_score
 
 class Boilerplate(pl.LightningModule):
     """
@@ -35,17 +36,26 @@ class Boilerplate(pl.LightningModule):
         # Get y_score / y_pred
         y_score = torch.cat([x['y_score'] for x in outputs])
 
-        y_pred = torch.cat([x['y_pred'] for x in outputs])
+        # y_pred = torch.cat([x['y_pred'] for x in outputs])
         y_true = torch.cat([x['y_true'] for x in outputs])
 
         # log = {'val_' + k: v for k, v in self.get_metrics(y_score, y_true).items()}
         log = self.get_val_metrics(y_score, y_true)
         log['step'] = self.current_epoch
-        log['log'] = copy.deepcopy(log)
-        return log
+        # log['log'] = copy.deepcopy(log)
+
+        for k,v in log.items():
+            self.log(k,v,on_epoch=True)
+
+        y_true=y_true.cpu().numpy()
+        y_score=y_score.cpu().numpy()
+        self.log("pr", wandb.plot.pr_curve(y_true, y_score))
+        self.log('confusion_matrix', wandb.plot.confusion_matrix(y_score,
+                                                                 y_true))
+        #return log
 
     def get_val_metrics(self, y_score, y_true):
-        log = {'val_' + k: v for k, v in self.get_metrics(y_score, y_true).items()}
+        log = {'val/' + k: v for k, v in self.get_metrics(y_score, y_true).items()}
         return log
 
     def get_metrics(self, y_score, y_true):
@@ -54,7 +64,7 @@ class Boilerplate(pl.LightningModule):
         return {'accuracy': accuracies[0],
                 'top3-accuracy': accuracies[1],
                 'top5-accuracy': accuracies[2],
-                'f1': f1_score(y_pred, y_true)}
+                }
 
     def accuracy(self, output, target, topk=(1,)):
         """
