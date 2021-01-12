@@ -106,7 +106,7 @@ class ResNet(Boilerplate):
         out = F.adaptive_avg_pool2d(out, 1)  # adapts to any output size
         out = out.view(out.size(0), -1)
         out = self.linear(out)
-        return F.log_softmax(out)
+        return F.log_softmax(out,1)
 
 
 def ResNet18(**kwargs):
@@ -131,7 +131,8 @@ def ResNet152(**kwargs):
 
 def test():
     net = ResNet18()
-    y = net(torch.randn(1, 3, 32, 32))
+    y = net(torch.randn(1, 1, 32, 32))
     print(y.size())
 
-# test()
+if __name__ == '__main__':
+    test()
