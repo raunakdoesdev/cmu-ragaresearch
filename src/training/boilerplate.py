@@ -99,6 +99,10 @@ class Boilerplate(pl.LightningModule):
     def test_visualizations(self, y_score, y_pred, y_true):
         raise NotImplementedError('Override this function with your own visualizations!')
 
+    def get_test_metrics(self, y_score, y_true):
+        log = {'test/' + k: v for k, v in self.get_metrics(y_score, y_true).items()}
+        return log
+
     def test_epoch_end(self, outputs):
         # Get y_score / y_pred
         y_score = torch.cat([x['y_score'] for x in outputs])
@@ -106,9 +110,11 @@ class Boilerplate(pl.LightningModule):
         y_true = torch.cat([x['y_true'] for x in outputs])
 
         self.test_visualizations(y_score, y_pred, y_true)
-        log = self.get_val_metrics(y_score, y_true)
-        log['log'] = copy.deepcopy(log)
-        return log
+        log = self.get_test_metrics(y_score, y_true)
+        #log['log'] = copy.deepcopy(log)
+        for k,v in log.items():
+            self.log(k,v,on_epoch=True)
+
 
     def training_step(self, batch, batch_idx):
         x, y_true = batch  # full song from data loader
