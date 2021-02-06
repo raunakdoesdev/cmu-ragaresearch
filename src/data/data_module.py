@@ -22,4 +22,4 @@ class MusicDataModule(pl.LightningDataModule):
                           pin_memory=True)
 
     def test_dataloader(self):
-        return self.val_dataloader() if self.test_set is None else DataLoader(self.test_set, batch_size=1)
+        return self.val_dataloader() if self.test_set is None else DataLoader(self.test_set,num_workers=cpu_count(), batch_size=1)
