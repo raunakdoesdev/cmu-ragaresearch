@@ -16,11 +16,12 @@ train, fcd_not_train = fcd.greedy_split(train_size=0.70)
 val, test = fcd_not_train.greedy_split(test_size=0.5)
 
 train = ChromaChunkDataset(train, chunk_size=100, augmentation=transpose_chromagram, stride=10)
-data = MusicDataModule(train, val, batch_size=32)
+data = MusicDataModule(train, val, test, batch_size=32)
 model = ResNet50(num_classes=max(fcd.y) + 1)
 
 
 def save_for_processing(y_score, y_pred, y_true):
+    os.makedirs('saves',exist_ok=True)
     with open('saves/carnatic-test-out.pkl', 'wb') as f:
         torch.save([y_score, y_pred, y_true], f)
 
