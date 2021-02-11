@@ -4,20 +4,18 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from src.training import Boilerplate
-import torch
 
 
 class Phononet(Boilerplate):
     def __init__(self, dropout=0.1):
         super(Phononet, self).__init__()
         self.encoder = nn.Sequential(OrderedDict([
-            # ('avgpool', nn.AvgPool2d([1, 10])),
-            # ('init_norm', nn.BatchNorm2d(1)),
-            # ('only_time_conv', nn.Conv2d(1, 100, [1, 100], stride=[1, 5])),
-            # ('relu0', nn.LeakyReLU()),
-            # ('maxpool', nn.MaxPool2d([1, 2])),
-            # ('reduce_time_conv', nn.Conv2d(100, 1, 1)),
-            # ('relu0p5', nn.LeakyReLU()),
+            ('init_norm', nn.BatchNorm2d(1)),
+            ('only_time_conv', nn.Conv2d(1, 100, [1, 100], stride=[1, 5])),
+            ('relu0', nn.LeakyReLU()),
+            ('maxpool', nn.MaxPool2d([1, 2])),
+            ('reduce_time_conv', nn.Conv2d(100, 1, 1)),
+            ('relu0p5', nn.LeakyReLU()),
 
             ('norm0', nn.BatchNorm2d(1)),
             ('conv1', nn.Conv2d(1, 64, 3, padding=1)),
@@ -48,26 +46,9 @@ class Phononet(Boilerplate):
         self.fc1 = nn.Linear(200, 40)
 
     def forward(self, x):
-        x = x.unsqueeze(1)  # add channel dim
+        x = x.unsqueeze(1)  # add empty channel dim
         x = self.encoder(x)
         x = x.view(x.shape[0], -1)  # flatten
         x = self.fc1(x)
         x = F.log_softmax(x, dim=1)
         return x
-
-    def training_step(self, batch, batch_idx):
-        x, y_true = batch  # full song from data loader
-
-        ret = {}
-        loss = 0
-
-        count = 0
-        for i, chunk_size in enumerate([75]):
-            if chunk_size > x.shape[2]:
-                continue
-            count += 1
-            unfolded = x.unfold(2, chunk_size, chunk_size).squeeze(0).permute(1, 0, 2)
-            y_score = self.forward(unfolded)
-            loss += F.nll_loss(y_score, torch.cat(len(unfolded) * [y_true]))
-        ret['loss'] = loss
-        return ret

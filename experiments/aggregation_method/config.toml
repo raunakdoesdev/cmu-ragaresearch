@@ -7,4 +7,5 @@ limit_songs = '/home/jupyter/ragaresearch/data/hindustani-limited-songs-list.jso
 metadata = '/home/jupyter/ragaresearch/data/hindustani-metadata.json'
 
 [training]
-batch_size = 64
+batch_size = 32
+chunk_size = 500

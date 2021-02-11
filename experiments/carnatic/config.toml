@@ -1,0 +1,10 @@
+[data]
+unit_test = false
+# chroma_folder = '/home/jupyter/ragaresearch/data/cqt_chroma_fixed'
+# chroma_folder = '/home/jupyter/ragaresearch/data/hindustani-cqt-chroma'
+chroma_folder = '/home/jupyter/ragaresearch/data/carnatic-chroma'
+limit_songs = '/home/jupyter/refactor/data/carnatic-limited-songs-list.json'
+metadata = '/home/jupyter/refactor/data/carnatic-metadata.json'
+
+[training]
+batch_size = 64
