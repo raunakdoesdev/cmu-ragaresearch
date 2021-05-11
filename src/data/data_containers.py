@@ -23,6 +23,7 @@ class FullChromaDataset(Dataset):
         """
 
         mbids = [os.path.basename(file_name).split('.')[0] for file_name in self.files]
+        print(f'These are the {mbids}')
         raga_ids = {self.metadata[mbid][self.raga_key][0]['common_name'] for mbid in mbids}
         raga_ids = sorted(raga_ids, key=lambda id: id.lower())
         self.raga_ids = {k: v + self.raga_id_offset for v, k in enumerate(raga_ids)}
@@ -37,7 +38,7 @@ class FullChromaDataset(Dataset):
         mbid = os.path.basename(file).split('.')[0]
         return self.raga_ids[self.metadata[mbid][self.raga_key][0]['common_name']]
 
-    def __init__(self, json_path, data_folder, include_mbids=None, carnatic=False, raga_id_offset=0):
+    def __init__(self, json_path, data_folder, include_mbids=None, carnatic=False, raga_id_offset=0, compression=10):
         """
         Creates a new dataset object.
 
@@ -60,7 +61,7 @@ class FullChromaDataset(Dataset):
         if include_mbids is not None:
             for self.file in copy.deepcopy(self.files):
                 file_name = os.path.basename(self.file).split('.pkl')[0]
-                if file_name not in include_mbids:
+                if file_name not in include_mbids or file_name not in self.metadata:
                     self.files.remove(self.file)
         else:
             for self.file in copy.deepcopy(self.files):
@@ -74,7 +75,7 @@ class FullChromaDataset(Dataset):
         for file in tqdm(self.files, desc="Loading Chromagram Files"):
             # self.X.append(torch.FloatTensor(pickle.load(open(file, 'rb'))).unsqueeze(0).squeeze())
             self.X.append(
-                F.avg_pool2d(torch.FloatTensor(pickle.load(open(file, 'rb'))).unsqueeze(0), [1, 10]).squeeze())
+                F.avg_pool2d(torch.FloatTensor(pickle.load(open(file, 'rb'))).unsqueeze(0), [1, compression]).squeeze())
             self.y.append(self._get_raga_id(file))
             self.mbids.append(os.path.basename(file).split('.pkl')[0])
 

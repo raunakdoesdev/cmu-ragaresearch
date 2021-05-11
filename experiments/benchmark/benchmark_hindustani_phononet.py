@@ -5,13 +5,15 @@ from pytorch_lightning.loggers import WandbLogger
 import os
 
 from experiments.circular_padding.resnet_circular_padding import *
+from models.phononet import Phononet
 from src import *
 from src.data.data_module import MusicDataModule
 
 config = toml.load('hindustani.toml')
 fcd = FullChromaDataset(json_path=config['data']['metadata'],
                         data_folder=config['data']['chroma_folder'],
-                        include_mbids=json.load(open(config['data']['limit_songs'])), compression=40)
+                        include_mbids=json.load(open(config['data']['limit_songs'])),
+                        compression=1)
 
 train, fcd_not_train = fcd.greedy_split(train_size=0.70)
 val, test = fcd_not_train.greedy_split(test_size=0.5)
@@ -19,33 +21,20 @@ val, test = fcd_not_train.greedy_split(test_size=0.5)
 train = ChromaChunkDataset(train, chunk_size=100, augmentation=transpose_chromagram, stride=10)
 data = MusicDataModule(train, val, batch_size=32)
 
-import sys
-
-if sys.argv[1] == '34':
-    model = ResNet34Circular(num_classes=max(fcd.y) + 1)
-elif sys.argv[1] == '50':
-    model = ResNet50Circular(num_classes=max(fcd.y) + 1)
-elif sys.argv[1] == '101':
-    model = ResNet101Circular(num_classes=max(fcd.y) + 1)
-
+model = Phononet(num_classes=max(fcd.y) + 1)
 model.epochs = 50
 
-logger = WandbLogger(project='ISMIR Raga Benchmark', name=f'Hindustani Training - ResNet{sys.argv[1]}')
+logger = WandbLogger(project='Raga Benchmark', name=f'Hindustani Training - PhonoNet')
 
 checkpoint_callback = ModelCheckpoint(
     monitor='val_accuracy',
-    filepath=f'/mnt/disks/checkpoints/new-checkpoints/hindustani-resnet{sys.argv[1]}-{{epoch:02d}}-{{val_accuracy:.2f}}',
+    filepath=f'/mnt/disks/checkpoints/new-checkpoints/hindustani-phononet-{{epoch:02d}}-{{val_accuracy:.2f}}',
     save_top_k=1,
     mode='max',
     verbose=True
 )
 
-if len(sys.argv) == 3:
-    print('Resuming!')
-    resume_from_checkpoint = os.path.join('/mnt/disks/checkpoints/new-checkpoints', sys.argv[2])
-else:
-    print('Not resuming!')
-    resume_from_checkpoint = None
+resume_from_checkpoint = None
 
 trainer = Trainer(gpus=1, logger=logger, max_epochs=model.epochs, num_sanity_val_steps=2,
                   deterministic=True, resume_from_checkpoint=resume_from_checkpoint,

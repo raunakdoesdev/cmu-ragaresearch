@@ -1,0 +1,6 @@
+dunya_token = 'ad57ef18f8c3a2f4962b7883ac6ed38b3578ba38'
+
+[chroma]
+audio_load_path = '/mnt/disks/checkpoints/full_audio/audiodata'
+chroma_save_path = '/mnt/disks/checkpoints/full_audio/hindustani-chroma'
+limited_songs_list = '/home/jupyter/ragaresearch/data/hindustani-limited-songs-list.json'

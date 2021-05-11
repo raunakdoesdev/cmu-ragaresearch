@@ -1,0 +1,10 @@
+dunya_token = 'ad57ef18f8c3a2f4962b7883ac6ed38b3578ba38'
+mode = 'carnatic'
+
+[chroma]
+audio_load_path = '/mnt/disks/checkpoints/full_audio/carnatic_audiodata'
+chroma_save_path = '/mnt/disks/checkpoints/full_audio/carnatic-chroma'
+limited_songs_list = '/home/jupyter/refactor/data/carnatic-limited-songs-list.json'
+
+[convert]
+gdrive_audio_path = '/mnt/disks/checkpoints/download/audio'

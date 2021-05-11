@@ -12,7 +12,7 @@ config = toml.load('carnatic.toml')
 fcd = FullChromaDataset(json_path=config['data']['metadata'],
                         data_folder=config['data']['chroma_folder'],
                         include_mbids=json.load(open(config['data']['limit_songs'])),
-                        carnatic=True)
+                        carnatic=True, compression=40)
 
 train, fcd_not_train = fcd.greedy_split(train_size=0.70)
 val, test = fcd_not_train.greedy_split(test_size=0.5)
@@ -31,7 +31,7 @@ elif sys.argv[1] == '101':
 
 model.epochs = 50
 
-logger = WandbLogger(project='Raga Benchmark', name=f'Carnatic Training - ResNet{sys.argv[1]}')
+logger = WandbLogger(project='ISMIR Raga Benchmark', name=f'Carnatic Training - ResNet{sys.argv[1]}')
 
 checkpoint_callback = ModelCheckpoint(
     monitor='val_accuracy',
